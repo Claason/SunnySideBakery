@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunny Side Bakery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FFB800; --warm: #FF6B35; --cream: #FFF8ED;
+    --rose: #F7C5A0; --brown: #3D1F0A; --mint: #A8D5BA; --pink: #F4A0B0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--brown); overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(255,248,237,0.92); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--sun);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900;
+    color: var(--warm); text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-weight: 500; text-decoration: none; color: var(--brown);
+    position: relative; padding-bottom: 2px; transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 2px; background: var(--warm); transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--warm); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 6rem 3rem 3rem; gap: 3rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,184,0,0.25) 0%, transparent 70%);
+    border-radius: 50%; animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.1);opacity:1} }
+
+  .hero-text { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-block; background: var(--sun); color: var(--brown);
+    font-weight: 500; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
+    animation: slideDown 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(3rem,6vw,5.5rem);
+    line-height: 1.05; animation: slideUp 0.9s ease both 0.2s;
+  }
+  .hero h1 em { font-style: italic; color: var(--warm); }
+  .hero-sub {
+    margin-top: 1.5rem; font-size: 1.1rem; font-weight: 300; line-height: 1.7;
+    max-width: 420px; animation: slideUp 0.9s ease both 0.4s;
+  }
+  .hero-btns { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; animation: slideUp 0.9s ease both 0.6s; }
+
+  .btn {
+    display: inline-block; padding: 0.85rem 2rem; border-radius: 100px;
+    font-weight: 500; font-size: 0.95rem; text-decoration: none;
+    transition: all 0.25s ease; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary { background: var(--warm); color: #fff; box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
+  .btn-primary:hover { background: var(--brown); transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--brown); border: 2px solid var(--brown); }
+  .btn-outline:hover { background: var(--brown); color: var(--cream); transform: translateY(-2px); }
+
+  /* HERO PHOTO GRID */
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    animation: fadeIn 1.2s ease both 0.4s;
+  }
+  .hero-card {
+    border-radius: 20px; overflow: hidden; position: relative; aspect-ratio: 3/4;
+    background: var(--rose); /* color shown while image loads or if missing */
+    box-shadow: 0 8px 30px rgba(61,31,10,0.12); transition: transform 0.3s ease;
+  }
+  .hero-card:hover { transform: scale(1.03); }
+  .hero-card:nth-child(2) { margin-top: 2rem; background: var(--mint); }
+  .hero-card:nth-child(3) { margin-top: -2rem; background: var(--pink); }
+  .hero-card:nth-child(4) { background: #FFE0B2; }
+  .hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-card-label {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem;
+    background: linear-gradient(transparent, rgba(61,31,10,0.65));
+    color: #fff; font-weight: 500; font-size: 0.85rem; text-align: center;
+  }
+
+  @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:none} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* SCROLLING STRIP */
+  .specials-strip { background: var(--brown); padding: 1.2rem 3rem; overflow: hidden; }
+  .strip-inner { display: flex; gap: 3rem; white-space: nowrap; animation: marquee 20s linear infinite; }
+  .strip-item { display: flex; align-items: center; gap: 0.5rem; color: var(--sun); font-weight: 500; font-size: 0.95rem; flex-shrink: 0; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* DAILY SPECIALS */
+  .section { padding: 5rem 3rem; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-tag { display: inline-block; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); font-weight: 500; margin-bottom: 0.75rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); color: var(--brown); line-height: 1.2; }
+
+  .specials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .special-card {
+    border-radius: 24px; overflow: hidden; background: #fff;
+    box-shadow: 0 4px 20px rgba(61,31,10,0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .special-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(61,31,10,0.15); }
+
+  .special-img-wrap {
+    width: 100%; height: 220px; overflow: hidden;
+    background: #FFF0D6; /* fallback color */
+    position: relative;
+  }
+  .special-card:nth-child(2) .special-img-wrap { background: #FFE8E0; }
+  .special-card:nth-child(3) .special-img-wrap { background: #E8F5EE; }
+  .special-card:nth-child(4) .special-img-wrap { background: #FDE8EF; }
+  .special-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .special-card:hover .special-img-wrap img { transform: scale(1.05); }
+
+  .special-body { padding: 1.4rem; }
+  .special-day { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); font-weight: 500; margin-bottom: 0.3rem; }
+  .special-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--brown); margin-bottom: 0.5rem; }
+  .special-desc { font-size: 0.9rem; color: #7A5C44; line-height: 1.6; }
+  .special-price { margin-top: 1rem; font-size: 1.2rem; font-weight: 700; color: var(--warm); }
+
+  /* CTA BANNER */
+  .cta-banner {
+    margin: 0 3rem 4rem; border-radius: 32px;
+    background: linear-gradient(135deg, var(--warm) 0%, #FF9A5C 50%, var(--sun) 100%);
+    padding: 4rem; display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap; position: relative; overflow: hidden;
+  }
+  /* Optional wide bakery atmosphere photo layered behind gradient */
+  .cta-banner-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.15; mix-blend-mode: overlay; pointer-events: none;
+  }
+  .cta-text { position: relative; z-index: 1; }
+  .cta-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3vw,2.5rem); color: #fff; margin-bottom: 0.5rem; }
+  .cta-text p { color: rgba(255,255,255,0.85); }
+  .btn-white { background: #fff; color: var(--warm); box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative; z-index: 1; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); color: var(--warm); }
+
+  /* HOURS & LOCATION */
+  .info-section {
+    padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    background: var(--brown); color: var(--cream);
+  }
+  .info-block h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--sun); margin-bottom: 1.5rem; }
+  .hours-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,248,237,0.1); font-size: 0.95rem; }
+  .hours-row span:first-child { color: var(--rose); }
+  .address { font-size: 1rem; line-height: 1.8; color: rgba(255,248,237,0.8); }
+  .address strong { color: #fff; }
+
+  footer { background: #2A1205; color: rgba(255,248,237,0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+  footer a { color: var(--sun); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 5rem 1.5rem 3rem; }
+    .hero-visual { display: none; }
+    .section { padding: 3rem 1.5rem; }
+    .cta-banner { margin: 0 1.5rem 3rem; padding: 2.5rem; }
+    .info-section { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">☀️ Sunny Side Bakery</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="custom-cakes.html">Custom Cakes</a></li>
+    <li><a href="#hours">Visit Us</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">✨ Baked Fresh Daily</div>
+    <h1>Your Neighborhood<br><em>Sweet Spot</em></h1>
+    <p class="hero-sub">Handcrafted pastries, artisan breads, and custom celebration cakes made with love — right in the heart of the neighborhood.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="custom-cakes.html">Order a Custom Cake</a>
+      <a class="btn btn-outline" href="gallery.html">See Our Gallery</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <!-- images/hero-croissant.jpg — close-up of golden butter croissants -->
+      <img src="images/hero-croissant.jpg" alt="Freshly baked butter croissants">
+      <div class="hero-card-label">Butter Croissants</div>
+    </div>
+    <div class="hero-card">
+      <!-- images/hero-cake.jpg — a decorated custom celebration cake -->
+      <img src="images/hero-cake.jpg" alt="Custom celebration cake">
+      <div class="hero-card-label">Custom Cakes</div>
+    </div>
+    <div class="hero-card">
+      <!-- images/hero-donut.jpg — glazed donuts on a tray or board -->
+      <img src="images/hero-donut.jpg" alt="Glazed donuts">
+      <div class="hero-card-label">Glazed Donuts</div>
+    </div>
+    <div class="hero-card">
+      <!-- images/hero-bread.jpg — rustic sourdough loaf, scored top -->
+      <img src="images/hero-bread.jpg" alt="Artisan sourdough loaf">
+      <div class="hero-card-label">Sourdough Loaves</div>
+    </div>
+  </div>
+</section>
+
+<div class="specials-strip">
+  <div class="strip-inner">
+    <div class="strip-item">🥐 Croissants — Fresh at 7am</div>
+    <div class="strip-item">🎂 Custom Cakes — Order 48hrs Ahead</div>
+    <div class="strip-item">🍰 Seasonal Specials Every Week</div>
+    <div class="strip-item">☕ Coffee + Espresso Bar</div>
+    <div class="strip-item">🍞 Sourdough Fridays</div>
+    <div class="strip-item">🥐 Croissants — Fresh at 7am</div>
+    <div class="strip-item">🎂 Custom Cakes — Order 48hrs Ahead</div>
+    <div class="strip-item">🍰 Seasonal Specials Every Week</div>
+    <div class="strip-item">☕ Coffee + Espresso Bar</div>
+    <div class="strip-item">🍞 Sourdough Fridays</div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-header">
+    <div class="section-tag">Rotating Menu</div>
+    <h2 class="section-title">This Week's<br>Daily Specials</h2>
+  </div>
+  <div class="specials-grid">
+
+    <div class="special-card">
+      <div class="special-img-wrap">
+        <!-- images/special-almond-croissant.jpg — almond croissant dusted with powdered sugar -->
+        <img src="images/special-almond-croissant.jpg" alt="Almond croissant with frangipane filling">
+      </div>
+      <div class="special-body">
+        <div class="special-day">Monday &amp; Tuesday</div>
+        <div class="special-name">Almond Croissant</div>
+        <p class="special-desc">Flaky, buttery pastry filled with frangipane cream and topped with toasted almonds.</p>
+        <div class="special-price">$4.50</div>
+      </div>
+    </div>
+
+    <div class="special-card">
+      <div class="special-img-wrap">
+        <!-- images/special-lemon-tart.jpg — lemon tart with torched meringue topping -->
+        <img src="images/special-lemon-tart.jpg" alt="Lemon tart with torched meringue">
+      </div>
+      <div class="special-body">
+        <div class="special-day">Wednesday</div>
+        <div class="special-name">Lemon Tart</div>
+        <p class="special-desc">Silky lemon curd in a buttery shortcrust shell, finished with a torched meringue crown.</p>
+        <div class="special-price">$6.00</div>
+      </div>
+    </div>
+
+    <div class="special-card">
+      <div class="special-img-wrap">
+        <!-- images/special-blueberry-danish.jpg — blueberry danish with cream cheese swirl -->
+        <img src="images/special-blueberry-danish.jpg" alt="Blueberry danish pastry">
+      </div>
+      <div class="special-body">
+        <div class="special-day">Thursday &amp; Friday</div>
+        <div class="special-name">Blueberry Danish</div>
+        <p class="special-desc">Laminated pastry swirled with vanilla cream cheese and studded with wild blueberries.</p>
+        <div class="special-price">$4.75</div>
+      </div>
+    </div>
+
+    <div class="special-card">
+      <div class="special-img-wrap">
+        <!-- images/special-strawberry-shortcake.jpg — slice of strawberry shortcake with cream -->
+        <img src="images/special-strawberry-shortcake.jpg" alt="Strawberry shortcake with whipped cream">
+      </div>
+      <div class="special-body">
+        <div class="special-day">Weekends Only</div>
+        <div class="special-name">Strawberry Shortcake</div>
+        <p class="special-desc">Fluffy chiffon layers with fresh strawberries and whipped cream. Weekend bliss in every bite.</p>
+        <div class="special-price">$7.50</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="cta-banner">
+  <!-- images/cta-bakery-bg.jpg — wide atmospheric shot of bakery interior or spread of baked goods (optional, adds texture behind gradient) -->
+  <img class="cta-banner-bg" src="images/cta-bakery-bg.jpg" alt="">
+  <div class="cta-text">
+    <h2>Celebrating Something Special?</h2>
+    <p>We craft custom cakes for birthdays, weddings, and every occasion in between.</p>
+  </div>
+  <a class="btn btn-white" href="custom-cakes.html">Design Your Cake →</a>
+</div>
+
+<div class="info-section" id="hours">
+  <div class="info-block">
+    <h3>Hours</h3>
+    <div class="hours-row"><span>Monday – Friday</span><span>7:00 AM – 6:00 PM</span></div>
+    <div class="hours-row"><span>Saturday</span><span>7:00 AM – 5:00 PM</span></div>
+    <div class="hours-row"><span>Sunday</span><span>8:00 AM – 3:00 PM</span></div>
+    <div class="hours-row"><span>Holidays</span><span>Vary — check socials</span></div>
+  </div>
+  <div class="info-block">
+    <h3>Find Us</h3>
+    <div class="address">
+      <strong>Sunny Side Bakery</strong><br>
+      142 Maple Street<br>
+      Greensboro, NC 27401<br><br>
+      📞 (336) 555-0182<br>
+      📧 hello@sunnysidebakery.com<br><br>
+      <a href="https://instagram.com" style="color:var(--sun)">@sunnysidebakery</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Sunny Side Bakery · Made with ❤️ in Greensboro, NC · <a href="custom-cakes.html">Order a Cake</a> · <a href="gallery.html">Gallery</a></p>
+</footer>
+
+</body>
+</html>
